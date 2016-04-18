@@ -41,7 +41,7 @@ jQuery ($) ->
     $inputs.each ->
       $input = $(this)
       path = $input.data('s2-href')
-      limit = $input.data('s2-limit') || 25
+      limit = $input.data('s2-limit') || 3
       customFormatSelection = $input.data('s2-format-selection')
       customFormatResult = $input.data('s2-format-result')
       if customFormatSelection isnt `undefined` && (window[customFormatSelection] isnt `undefined`)
@@ -120,7 +120,8 @@ jQuery ($) ->
       else
         s2FullOptions = $.extend({}, s2DefaultOptions, s2UserOptions)
 
-      $input.select2(s2FullOptions)
+      $input.select2(s2FullOptions).parent().find('.select2-with-searchbox').append('<div class=\'select2-footer\'><a class=\'create_link\' data-toggle=\'modal\' data-target=\'#myModal\' href=\'#\'><i class=\'fa fa-plus-circle\'></i> Add a new item</a></div>').on 'click', '.create_link', ->
+        $('#myModal').modal()
 
       return
     return
