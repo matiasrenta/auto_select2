@@ -41,6 +41,7 @@ jQuery ($) ->
     $inputs.each ->
       $input = $(this)
       path = $input.data('s2-href')
+      # Para cambiar este nro poner en el formulario "input_html: {'data-s2-limit' => 10}" y tambien modificar el metodo limit del search adapter con el mismo nro
       limit = $input.data('s2-limit') || 3
       customFormatSelection = $input.data('s2-format-selection')
       customFormatResult = $input.data('s2-format-result')
@@ -119,9 +120,18 @@ jQuery ($) ->
         s2FullOptions = $.extend({}, s2DefaultOptions)
       else
         s2FullOptions = $.extend({}, s2DefaultOptions, s2UserOptions)
-
-      $input.select2(s2FullOptions).parent().find('.select2-with-searchbox').append('<div class=\'select2-footer\'><a class=\'create_link\' data-toggle=\'modal\' data-target=\'#myModal\' href=\'#\'><i class=\'fa fa-plus-circle\'></i> Add a new item</a></div>').on 'click', '.create_link', ->
-        $('#myModal').modal()
+        addNew = $input.data("s2-button-new")
+        idModal = $input.data("s2-id-modal")
+        titleModal = $input.data("s2-title")
+        if addNew
+          # Si $input.data("s2-button-new") esta definido como true en el html, se agrega con append el botón Nuevo en el dropdown
+          $input.select2(s2FullOptions).parent()
+            .find('.select2-drop')
+            .append('<div class=\'select2-footer\'><a class=\'create_link\' data-toggle=\'modal\' data-target=\'#'+idModal+'\' href=\'#\'><i class=\'fa fa-plus-circle\'></i> '+titleModal+'</a></div>')
+            .on 'click', '.create_link', ->
+              $("#" + idModal).modal()
+        else
+          $input.select2(s2FullOptions)
 
       return
     return
