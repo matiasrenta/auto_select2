@@ -42,7 +42,7 @@ jQuery ($) ->
       $input = $(this)
       path = $input.data('s2-href')
       # Para cambiar este nro poner en el formulario "input_html: {'data-s2-limit' => 10}" y tambien modificar el metodo limit del search adapter con el mismo nro
-      limit = $input.data('s2-limit') || 3
+      limit = $input.data('s2-limit') || 50
       customFormatSelection = $input.data('s2-format-selection')
       customFormatResult = $input.data('s2-format-result')
       if customFormatSelection isnt `undefined` && (window[customFormatSelection] isnt `undefined`)
@@ -115,7 +115,6 @@ jQuery ($) ->
       }
 
       s2UserOptions = $input.data("s2-options")
-
       if s2UserOptions is `undefined`
         s2FullOptions = $.extend({}, s2DefaultOptions)
       else
@@ -129,7 +128,10 @@ jQuery ($) ->
             .find('.select2-drop')
             .append('<div class=\'select2-footer\'><a class=\'create_link\' data-toggle=\'modal\' data-target=\'#'+idModal+'\' href=\'#\'><i class=\'fa fa-plus-circle\'></i> '+titleModal+'</a></div>')
             .on 'click', '.create_link', ->
-              $("#" + idModal).modal()
+              $input.select2('close')
+              $("#" + idModal).modal({backdrop: 'static'}).on 'shown.bs.modal', ->
+                $(this).find('input:text:visible:first').focus()
+                return
         else
           $input.select2(s2FullOptions)
 
